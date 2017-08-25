@@ -16,12 +16,12 @@ Number of classes = 43
 
 Here is an exploratory visualization of the data set. This is a random selection of the images along with their labels -
 
-[image1]: ./examples/dataset1.png "Dataset 1"
 
+![image1](./examples/dataset1.png "Dataset 1")
 
 This is a histogram representing the distribution of the data in the training/test and validation dataset.
 
-[image2]: ./examples/train_test_validation_histogram.png "Data Distribution"
+![image2](./examples/train_test_validation_histogram.png "Data Distribution")
 
 I observed that the number of samples was heavily skewed so this dataset would benefit from some data augmentation to compensate for fewer images (in some examples)
 
@@ -39,13 +39,13 @@ Pixel values often lie in the [0, 255] range. Feeding these values directly into
 I used the np.mean function to convert the images to grayscale format
 Converting the image to grayscale format reduces the noise in our data and also reduces the original data size (which means less unnecessary details for the network to learn).
 
-[image3]: ./examples/grayscale.png "Original VS Grayscale VS Normalized"
+![image3](./examples/grayscale.png "Original VS Grayscale VS Normalized")
 
 - Augmenting Data
 
 We observed in our earlier histogram that the data distribution is skewed -
 
-[image4]: ./examples/skewed.png "Skewed data distribution"
+![image4](./examples/skewed.png "Skewed data distribution")
 
 Based on this I estimated that on average if we have 1000 samples of data for every example that should be sufficient for our dataset.
 
@@ -57,7 +57,7 @@ I augmented the data using the following techniques
 
 These are some of the result samples -
 
-[image5]: ./examples/transformations.png "Transformations"
+![image5](./examples/transformations.png "Transformations")
 
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
@@ -94,22 +94,31 @@ Based on these results I stuck to using my augmented data.
 
 To train the model I tried tuning the following hyperparameters
 
-| Batch size  |  Validation Accuracy  |  Test Accuracy
+| Batch size  |  Validation Accuracy  |  Test Accuracy |
+|---|---|---|
 | 128  | 95.1 | 93.4 |
 | 512 |  92.0 | 89.0 |
 | 1024 |  88.0 | 88.1 |
 
 | Number of epochs  | Validation Accuracy  | Test Accuracy |
-|---|---|
+|---|---|---|
 | 10  | 93.2  | 90.1
 | 25  |  95.1 | 93.4 |
-| 50 |   |  
+| 50 |  93.7 | 91.4 |  
+
+
+I expected lower validation accuracy for lower learning rates.
 
 | Learning Rate  | Validation Accuracy  |  Test Accuracy  |  
 |---|---|---|
-| 0.1 |   |   |  
-| 0.01  |   |   |
-| 0.001 |   |   |
+| 0.1 |  92.4 |  91.2 |  
+| 0.01  | 93.7  |  89.3|
+| 0.001 |95.1 | 93.4 |
+
+Final
+Batch Size: 128
+Number of epochs: 25
+Learning Rate:
 
 
 ###Test a Model on New Images
@@ -118,43 +127,20 @@ To train the model I tried tuning the following hyperparameters
 
 I chose 5 normal traffic signs from the Wikipedia article on German Images. I expected a high rate of accuracy as these seem pretty easy to classify. Here is a sample of the images -
 
-[image5]: ./sample/1.png
-[image6]: ./sample/2.png
-[image7]: ./sample/3.png
-[image8]: ./sample/4.png
-[image9]: ./sample/5.png
+![image6](./new_images.png,"New Images")
 
-####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set.
 
-Here are the results of the prediction:
+I tested the models Accuracy with prediction and these were the results
 
-| Image			        |     Prediction	        					|
-|:---------------------:|:---------------------------------------------:|
-| Stop Sign      		| Stop sign   									|
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+![image7](./predicted_versus_actual.png "Predicted VS Actual Accuracy")
 
-
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+It correctly classified 4 of the 5 images giving it an accuracy of 80%
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+For the images my top 5 Softmax probablities were predicted as follows
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+![image8](./softmax_probabilites.png "Softmax Probabilites")
 
-| Probability         	|     Prediction	        					|
-|:---------------------:|:---------------------------------------------:|
-| .60         			| Stop sign   									|
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
-
-
-For the second image ...
-
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+For the wrongly predicted Stop Sign we observe that stop sign was had the 3rd highest probablity among the samples.
