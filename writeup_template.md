@@ -127,13 +127,13 @@ Learning Rate:
 
 I chose 5 normal traffic signs from the Wikipedia article on German Images. I expected a high rate of accuracy as these seem pretty easy to classify. Here is a sample of the images -
 
-![image6](./new_images.png,"New Images")
+![image6](./examples/new_images.png,"New Images")
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set.
 
 I tested the models Accuracy with prediction and these were the results
 
-![image7](./predicted_versus_actual.png "Predicted VS Actual Accuracy")
+![image7](./examples/predicted_versus_actual.png "Predicted VS Actual Accuracy")
 
 It correctly classified 4 of the 5 images giving it an accuracy of 80%
 
@@ -141,6 +141,6 @@ It correctly classified 4 of the 5 images giving it an accuracy of 80%
 
 For the images my top 5 Softmax probablities were predicted as follows
 
-![image8](./softmax_probabilites.png "Softmax Probabilites")
+![image8](./examples/softmax_probabilites.png "Softmax Probabilites")
 
 For the wrongly predicted Stop Sign we observe that stop sign was had the 3rd highest probablity among the samples.
