@@ -133,7 +133,7 @@ I chose 5 normal traffic signs from the Wikipedia article on German Images. I ex
 
 I tested the models Accuracy with prediction and these were the results
 
-![image7](./examples/predicted_versus_actual.png "Predicted VS Actual Accuracy")
+![image7](./examples/predicted_vs_actual.png "Predicted VS Actual Accuracy")
 
 It correctly classified 4 of the 5 images giving it an accuracy of 80%
 
