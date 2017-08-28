@@ -86,6 +86,67 @@ I added extra fully connected layers and added dropout with an initial value of 
 
 Based on my experimentation with dropout and adding more layers I chose to stick to the final architecture (Architecture 3).
 
+----
+** Final Architecture **
+
+My network used the Lenet Lab as a starting point. I added dropout, convolution and fully-connected layers on top of the current layers
+
+
+Layer 1
+Input: 32 x 32 x 1 image
+Conv: (3 x 3 x 32 filter, Stride 1, Ouputs : 30 x 30 x 32 )
+Relu Activation
+
+Layer 2
+Input: 30 x 30 x 32
+Conv: (3 x 3 x 32 filter, Stride 1, Output: 28 x 28 x 32 )
+Relu Activation
+Maxpool ( 2 x 2 kernel, 2 x 2 stride )
+
+
+Layer 3
+Input: 14 x 14 x 32
+Conv: (3 x 3 x 64 filter, Stride 1, Output: 12 x 12 x 64 )
+Relu Activation
+Maxpool ( 2 x 2 kernel, 2 x 2 stride )
+
+Layer 4
+Input: 6 x 6 x 64
+Conv: (3 x 3 x 64 filter, Stride 1, Output: 4 x 4 x 64 )
+Relu Activation
+
+Flatten 4 x 4 x 64 output to 1024 to feed to FC Layers
+
+Layer 4
+Input: 6 x 6 x 64
+Conv: (3 x 3 x 64 filter, Stride 1, Output: 4 x 4 x 64 )
+Relu Activation
+
+
+Layer 5
+Input: 1024
+Output : 512
+Relu Activation + Dropout (keep_prob=0.7)
+
+Layer 6
+Input: 512
+Output : 256
+Relu Activation + Dropout (keep_prob=0.7)
+
+
+Layer 7
+Input: 256
+Output : 128
+Relu Activation
+
+
+Layer 8
+Input: 128
+Output : 43
+Relu Activation
+
+-----
+
 The architecture was trained with the following hyperparameters -
 
 Learning Rate = 0.001
@@ -134,13 +195,44 @@ Keep Probability: 0.7
 
 From this I came to the conclusion that the learning rate has the maximum impact on the final model.
 
+
+####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+
+A) The approach I used to train the model involved preprocessing the data, training, test and validation sets, augmenting additional data and experimenting with the network model and the hyperparameters.
+
+Training the model was the most challenging part which I have highlighted here -
+
+My first step was to use the original [LeNet architecture](http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf) architecture and seeing how well this neural network can work. This network had a 92% validation accuracy and 90% test accuracy with the augmented and preprocessed dataset.
+
+I adapted this model and added an additional more convolutional layers. I made the filters bigger so that each filter is capable of representing more information about the image overall. I also removed some of the pooling layers so that there can be more data passed from one layer to another. This resulted in a validation accuracy of 96.6 and a test accuracy of 94.6.  
+
+The final architecture which I settled on involved adding additional fully-connected layers. I felt that by adding additional fully-connected layers and dropout it would prevent overfitting the network and the test accuracy would increase. I settled for a final validation accuracy of 98.4% and a test accuracy of 95.7%.
+
+I carried out a number of experiments with the hyperparameters as mentioned in the previous question in order fine-tune my model and determined the learning rate has drastic effects on the models overall performance.
+
 ###Test a Model on New Images
 
 ####1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-I chose 5 normal traffic signs from the Wikipedia article on German Images. I expected a high rate of accuracy as these seem pretty easy to classify. Here is a sample of the images -
 
-![image6](./examples/new_images.png s"New Images")
+These are the traffic signs I chose from the net -
+
+![image6](./examples/new_images.png "New Images")
+
+Sign 1: Keep right
+This sign is superimposed along with a solar light. I want to see if my model can distinguish it given other unknown noisy data in the background.
+
+Sign 2: Stop
+The stop sign is at an angle with trees in the background. Background noise should not prevent the model from predicting the results.
+
+Sign 3: Speed Limit 60
+There are various different speed limits possible. I want to see how good my model is at determining one speed limit over the other.
+
+Sign 4: Wild Animal Crossing
+There may be confusion amongst this sign and children and pedestrain crossing. I want to see if the model I have trained is smart enough to figure that out.
+
+Sign 5: Children crossing
+This sign is rotated and has another sign (School) along with it. I want to see if the model can figure out important features of this sign without getting confused by the other signs.
 
 ####2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set.
 
@@ -148,7 +240,19 @@ I tested the models Accuracy with prediction and these were the results
 
 ![image7](./examples/predicted_vs_actual.png "Predicted VS Actual Accuracy")
 
-It correctly classified 4 of the 5 images giving it an accuracy of 80%
+
+It correctly classified 2 of the 5 images giving it an accuracy of 40% which is very low.
+My model is definitely overfitting the data based on the dataset provided. It is unable to deal with noise from external objects.
+
+Image 1 : Keep Right - It predicts it as priority road. The solar panel above the image confuses the model about the shape so it is unable to describe the image correctly.
+
+Image 2 : Stop - Stop sign is correctly predicted
+
+Image 3 : Speed Limit 60 - It is unable to predict whether the number is 60 or 80 km/h.s
+
+Image 4 : Wild Animal Crossing - Correctly Predicted
+
+Image 5 : Children Crossing - Different from the children crossing sign of the dataset. It confuses this with the go straight or left sign below it.
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability.
 
@@ -156,4 +260,10 @@ For the images my top 5 Softmax probablities were predicted as follows
 
 ![image8](./examples/softmax_probabilites.png "Softmax Probabilites")
 
-For the wrongly predicted sign for 60 km/hr the probabilities for 30 km/h and 60 km/h were the same.
+
+For the incorrectly predicted images
+Image 1: Keep Right - Keep right was not mentioned in the list. The model fails when external objects are present. Any external data can be cropped to see if results improve for a given image.
+
+Image 3 : Speed Limit 60 - Speed limit for 60 was the second highest amongst the possible signs. This shows that maybe a smaller CNN can be tuned for the speed limits alone to improve accuracy.
+
+Image 5 : Children Crossing - Completely different signs were mentioned in the top 5 softmax probabilities. Maybe some images with signs like this representing scenarios where two signs may be augmented need to be added to the training dataset.
